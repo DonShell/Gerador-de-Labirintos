@@ -29,15 +29,30 @@ function gerar(){
 
 
 	//personalizando o cenario
-	preDefinicao = Mesclar(
-		Mesclar(
-			Quadrado(altura),Quadrado(altura/2,false),parseInt(altura/4),parseInt(altura/4)
-		),
-		Quadrado((altura/8)*3),parseInt(altura/8)*3,parseInt(altura/8)*3
-	);
+	var preDefinicao;
 
+	/*
+	preDefinicao = 
+	MesclaCentralizada(
+		MesclaCentralizada(
+			Quadrado(altura),Quadrado(parseInt(altura*0.8),false)
+		),
+		MesclaCentralizada(
+			MesclaCentralizada(
+				Quadrado(parseInt(altura*0.7)),Quadrado(parseInt(altura*0.6),false)
+			),
+			MesclaCentralizada(
+				MesclaCentralizada(
+					Quadrado(parseInt(altura*0.5)),Quadrado(parseInt(altura*0.4),false)
+				),
+				Quadrado(parseInt(altura*0.3))
+			)
+		)
+	);
+	*/
 	
-	MostrarMatrizEmConsole(preDefinicao);
+	//imprime no console a matriz preDefinicao
+	//MostrarMatrizEmConsole(preDefinicao);
 	
 
 	//criando o labirinto

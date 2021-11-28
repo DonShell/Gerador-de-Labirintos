@@ -19,7 +19,7 @@ function GerarRetangulo(altura,largura,preenchimento = true){
 
 
 //Utilize apenas matrizes que contem o indice 0 com a largura maxima
-function Mesclar(matriz_1, matriz_2,localizacao_x = 0 ,localizacao_y = 0,modo = "sobrepor")
+function MesclarMatriz(matriz_1, matriz_2,margemTopo = 0 ,margemEsquerda = 0,tipoDeMescla = "sobrepor")
 {
 
 	var altura,largura;
@@ -46,7 +46,7 @@ function Mesclar(matriz_1, matriz_2,localizacao_x = 0 ,localizacao_y = 0,modo = 
 
 
 	//percorrendo e gerando a matrizresultante
-	for (var y = localizacao_y; y < altura; y++)
+	for (var y = margemTopo; y < altura; y++)
 	{
 		//cria a linha caso ela não exista
 		if ((typeof matriz_resultante[y])=="undefined"){
@@ -54,10 +54,10 @@ function Mesclar(matriz_1, matriz_2,localizacao_x = 0 ,localizacao_y = 0,modo = 
 		}
 		
 		// só contiunua pergorrendo a matriz caso a segunda matriz possua valor nesta linha
-		if ((typeof matriz_2[y-localizacao_y])!="undefined")
+		if ((typeof matriz_2[y-margemTopo])!="undefined")
 		{
 
-			for (var x = localizacao_x; x < largura; x++)
+			for (var x = margemEsquerda; x < largura; x++)
 			{
 				//se um dos argumentos não foi definido, defina-os
 				if ((typeof matriz_1[y][x])=="undefined")
@@ -65,9 +65,9 @@ function Mesclar(matriz_1, matriz_2,localizacao_x = 0 ,localizacao_y = 0,modo = 
 					matriz_1[y][x] = false;
 				}
 				//se o local da segunda matriz existir então ele executa a mescla do valor
-				if (typeof matriz_2[y-localizacao_y][x-localizacao_x]!="undefined")
+				if (typeof matriz_2[y-margemTopo][x-margemEsquerda]!="undefined")
 				{
-					matriz_resultante[y][x] = MesclarValores[modo](matriz_1[y][x], matriz_2[y-localizacao_y][x-localizacao_x] );
+					matriz_resultante[y][x] = MesclarValores[tipoDeMescla](matriz_1[y][x], matriz_2[y-margemTopo][x-margemEsquerda] );
 				}
 			}
 		}
@@ -100,8 +100,15 @@ function MostrarMatrizEmConsole(matriz)
 		console.log(linha + "|");
 	}
 	console.log("");
+}
 
 
+function MesclaCentralizada (matriz_1,matriz_2,tipoDeMescla = "sobrepor")
+{
+	margemTopo = parseInt((matriz_1.length/2) - (matriz_2.length/2));
+	margemEsquerda =  parseInt((matriz_1[0].length/2) - (matriz_2[0].length/2));
+
+	return MesclarMatriz(matriz_1,matriz_2,margemTopo,margemEsquerda,tipoDeMescla);
 }
 
 const MesclarValores = new Array(4);
@@ -134,3 +141,5 @@ MesclarValores["sobrepor"] = function(...valor)
 		}
 		return resultado;
 	};
+
+
