@@ -1,29 +1,136 @@
-function GerarMolde(altura,largura){
-	var matriz = new Array(altura);
-	//Criando matriz de mapeamento
+function GerarRetangulo(altura,largura,preenchimento = true){
+	
+	//Criando matriz
+	
+	var matriz = new Array();
 	//true =  parte de labirinto
 	//false = parte sem labirinto
 	for (var y = 0;y < altura; y++)
 	{
-		matriz[y] = new Array(largura);
+		matriz[y] = new Array();
 		for (var x = 0; x < altura; x++)
 		{
-			matriz[y][x] = true;
+			matriz[y][x] = preenchimento;
 		}
 	}
 	
 	return matriz;
 }
 
-function GerarQuadrado(matriz, altura, largura,localizacao_x = 0 ,localizacao_y = 0, preenchimento = false )
+
+//Utilize apenas matrizes que contem o indice 0 com a largura maxima
+function Mesclar(matriz_1, matriz_2,localizacao_x = 0 ,localizacao_y = 0,modo = "sobrepor")
 {
-	
-	for (var y = localizacao_y; y < (altura + localizacao_y); y++)
+
+	var altura,largura;
+	if (matriz_1.length < matriz_2.length)
 	{
-		for (var x = localizacao_x; x < (largura + localizacao_x); x++)
+		altura = matriz_2.length
+	}
+	else
+	{
+		altura = matriz_1.length
+	}  
+
+	if (matriz_1[0].length < matriz_2[0].length)
+	{
+		largura = matriz_2[0].length
+	}
+	else
+	{
+		largura = matriz_1[0].length
+	}  
+
+
+	matriz_resultante = matriz_1;
+
+
+	//percorrendo e gerando a matrizresultante
+	for (var y = localizacao_y; y < altura; y++)
+	{
+		//cria a linha caso ela não exista
+		if ((typeof matriz_resultante[y])=="undefined"){
+			matriz_resultante[y] = new Array(largura);
+		}
+		
+		// só contiunua pergorrendo a matriz caso a segunda matriz possua valor nesta linha
+		if ((typeof matriz_2[y-localizacao_y])!="undefined")
 		{
-			matriz[y][x] = preenchimento;
+
+			for (var x = localizacao_x; x < largura; x++)
+			{
+				//se um dos argumentos não foi definido, defina-os
+				if ((typeof matriz_1[y][x])=="undefined")
+				{
+					matriz_1[y][x] = false;
+				}
+				//se o local da segunda matriz existir então ele executa a mescla do valor
+				if (typeof matriz_2[y-localizacao_y][x-localizacao_x]!="undefined")
+				{
+					matriz_resultante[y][x] = MesclarValores[modo](matriz_1[y][x], matriz_2[y-localizacao_y][x-localizacao_x] );
+				}
+			}
 		}
 	}
-	return matriz;
+	return matriz_resultante;
 }
+
+function Quadrado(tamanho = 2, preenchimento = true )
+{
+	return GerarRetangulo(tamanho,tamanho, preenchimento);
+}
+
+function MostrarMatrizEmConsole(matriz)
+{
+	var linha = "  ";
+	for (var x = 0;x < matriz[0].length; x++)
+	{
+		linha = linha + " " + x;
+	}
+	console.log(linha);
+
+
+	for (var y = 0;y < matriz.length; y++)
+	{
+		linha = y + "|";
+		for (var x = 0; x < matriz[y].length; x++)
+		{
+			linha = linha + " " + (matriz[y][x] * 1);
+		}
+		console.log(linha + "|");
+	}
+	console.log("");
+
+
+}
+
+const MesclarValores = new Array(4);
+MesclarValores["e"] = function(...valor)
+	{
+		var resultado = valor[0];
+		for (var contador = 1; contador < valor.length ;contador++)
+		{
+			resultado = resultado && valor[contador];
+		}
+		return resultado;
+	};
+MesclarValores["ou"] = function(...valor)
+	{
+		var resultado = valor[0];
+		for (var contador = 1; contador < valor.length ;contador++)
+		{
+			resultado = resultado || valor[contador];
+		}
+		return resultado;
+	};
+
+	//ultimo argumento é o que prevalece
+MesclarValores["sobrepor"] = function(...valor)
+	{
+		var resultado = valor[0];
+		for (var contador = 1; contador < valor.length ;contador++)
+		{
+			resultado = valor[contador];
+		}
+		return resultado;
+	};

@@ -29,13 +29,16 @@ function gerar(){
 
 
 	//personalizando o cenario
-	preDefinicao = GerarMolde(altura,largura);
-	preDefinicao = GerarQuadrado(preDefinicao,40,40,5,5);
-	preDefinicao = GerarQuadrado(preDefinicao,30,30,10,10,true);
+	preDefinicao = Mesclar(
+		Mesclar(
+			Quadrado(altura),Quadrado(altura/2,false),parseInt(altura/4),parseInt(altura/4)
+		),
+		Quadrado((altura/8)*3),parseInt(altura/8)*3,parseInt(altura/8)*3
+	);
 
-
-
-
+	
+	MostrarMatrizEmConsole(preDefinicao);
+	
 
 	//criando o labirinto
 	labirinto = Gerar_Labirinto(altura,largura,preDefinicao);

@@ -89,19 +89,35 @@ function Gerar_Labirinto(altura_do_labirinto,largura_do_labirinto, MatrizDeMolde
 	//esta função cria um novo labirinto
 	this.criar = function()
 	{
-		//este é o ponto inicial onde a linha começará a se desenvolver
-		var inicio = varrendoPontosDisponiveis();
-		rota[0] = inicio;
+	
+
+
+		var ponto_de_partida = varrerPontosDisponiveis();
+
+		//executa o loop de criação de ramificações até não haver lugar disponivel
+		while(ponto_de_partida){
 		
+			this.criarRamificacao(ponto_de_partida);
+
+			ponto_de_partida = varrerPontosDisponiveis();
+		}
+
+	}//fim da funcao criar
+
+
+	//essta função cria uma linha que se divide percorendo todo espaço disponivel
+	this.criarRamificacao = function(inicio = {x:1,y:1})
+	{
+		
+		var endereco_rota = rota.length;
+
+		//este é o ponto inicial onde a linha começará a se desenvolver
+		rota[endereco_rota] = inicio;
+			
+
 		//classifica este ponto como invalido para proximas linhas
 		pontos[inicio.y][inicio.x] = false;
 
-		//variaveis para facilitar o rota[atual]
-		var local = { x:0, y:0 };
-
-		var endereco_rota = 0;
-
-		var contador_linhas = 0;
 		
 		do { //fica no loop ate todos os pontos serem preenchidos
 			
@@ -115,10 +131,8 @@ function Gerar_Labirinto(altura_do_labirinto,largura_do_labirinto, MatrizDeMolde
 				var escolha = alvos[ parseInt(Math.random() * alvos.length) ];
 
 				//this.linhas[] = { a:{x,y} , b:{x,y} }
-				this.linhas[contador_linhas] = new Linha(rota[endereco_rota],escolha);  
+				this.linhas[linhas.length] = new Linha(rota[endereco_rota],escolha);  
 				
-				//indica a proxima rota a ser gravada
-				contador_linhas++;	
 				
 				//defite ponto usado na linha como invalido para outras linhas
 				pontos[escolha.y][escolha.x] = false;
@@ -139,17 +153,22 @@ function Gerar_Labirinto(altura_do_labirinto,largura_do_labirinto, MatrizDeMolde
 
 		}while(!(endereco_rota == -1)) //só sai do loop quando todos os pontos já forem ocupados
 
-	}//fim da funcao criar
+	}
 
-	var varrendoPontosDisponiveis = function()
+	//essa função é responsavel por verificar se todos os pontos disponiveis do labirindo foram ocupados
+	//retorna false se todos os pontos estiverem ocupados, se não retorna um objeto {x,y} com a localização de um ponto a ser preenchido
+	var varrerPontosDisponiveis = function()
 	{
-
+		//varrendo a matriz de pontos
 		for (var y = 0;y < tamanho.altura; y++)
 		{
 			for (var x = 0; x < tamanho.altura; x++)
 			{
+				//quando encontrar um local disponivel
 				if(pontos[y][x])
 				{
+
+					//retorna a localização do local disponivel
 					localPonto = Dimencoes(x,y);
 					return localPonto;	
 				}
