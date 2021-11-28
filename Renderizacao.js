@@ -10,13 +10,15 @@ function delay(milisegundos) {
   } while (currentDate - date < milisegundos);
 }
 
+var preDefinicao;
+
 //cria o objeto labirindo e renderiza ele em uma pagina web
 function gerar(){
 	
 	//pega os valores digitados pelo usuário
-	var altura = document.getElementById("altura").value;
-	var largura = document.getElementById("largura").value;
-	var tamanho_passo = document.getElementById("passo").value;
+	var altura = parseInt(document.getElementById("altura").value);
+	var largura =  parseInt(document.getElementById("largura").value);
+	var tamanho_passo =  parseInt(document.getElementById("passo").value);
 
 
 	//preparando cenário
@@ -26,12 +28,20 @@ function gerar(){
 	cenario_labirinto.style.width = ( largura * passo ) + "px";
 
 
-	//gerando labirinto
-	labirinto = new Gerar_Labirinto(altura,largura);
-	labirinto.criar();	
+	//personalizando o cenario
+	preDefinicao = GerarMolde(altura,largura);
+	preDefinicao = GerarQuadrado(preDefinicao,40,40,5,5);
+	preDefinicao = GerarQuadrado(preDefinicao,30,30,10,10,true);
+
+
+
+
+
+	//criando o labirinto
+	labirinto = Gerar_Labirinto(altura,largura,preDefinicao);
 	
 	//percorre a lista de todas as linhas do labirinto
-	for(contador = 0 ; contador < labirinto.linhas.length ; contador++)
+	for(contador = 0 ; contador < labirinto.length ; contador++)
 	{ 
 		
 		//inserindo a linha na pagina, dentro do elemento #labirinto
@@ -39,7 +49,7 @@ function gerar(){
 		//innerHTML("<div class='linha' id='l_" + contador + "'></div>");
 	
 		//organizando tamanho e posição da linha
-		coordenar_linha(linhaDIV, labirinto.linhas[contador],tamanho_passo);
+		coordenar_linha(linhaDIV, labirinto[contador],tamanho_passo);
 
 		//insere a linha no labirinto
 		cenario_labirinto.appendChild(linhaDIV);
